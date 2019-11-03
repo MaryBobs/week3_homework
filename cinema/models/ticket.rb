@@ -41,6 +41,18 @@ def update()
   SqlRunner.run(sql,values)
 end
 
+def self.ticket_sale(customer,film, num_of_tickets)
+  ticket = 0
+  while ticket < num_of_tickets
+  customer.buy_ticket(film)
+  sale = Ticket.new({'customer_id' => customer.id, 'film_id' => film.id})
+  sale.save()
+  ticket += 1
+  end
+  customer.update()
+end
+
+
 def self.all()
   sql = "SELECT * FROM tickets;"
   return SqlRunner.run(sql).map{|ticket| Ticket.new(ticket)}

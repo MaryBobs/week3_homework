@@ -50,6 +50,10 @@ def films_booked()
   return SqlRunner.run(sql, values).map{|film| Film.new(film)}
 end
 
+def buy_ticket(film)
+  @funds -= film.price
+end
+
 def self.all()
   sql = "SELECT * FROM customers;"
   return SqlRunner.run(sql).map{|customer| Customer.new(customer)}
