@@ -2,7 +2,8 @@ require_relative("../db/sql_runner.rb")
 
 class Film
 
-attr_reader :id, :title, :price
+attr_reader :id
+attr_accessor :title, :price
 
 def initialize(options)
   @id = options['id'].to_i if options['id']
@@ -25,6 +26,25 @@ def delete()
   WHERE id = $1;"
   values = [@id]
   SqlRunner.run(sql, values)
+end
+
+def details()
+  sql = "SELECT * FROM films WHERE id = $1;"
+  values = [@id]
+  return SqlRunner.run(sql, values).map{|film| Film.new(film)}
+end
+
+def update()
+  sql = "UPDATE films
+  SET (title, price) = ($1, $2)
+  WHERE id = $3"
+  values = [@title, @price, @id]
+  SqlRunner.run(sql, values)
+end
+
+def self.all()
+  sql = "SELECT * FROM films"
+  return SqlRunner.run(sql).map{|film| Film.new(film)}
 end
 
 def self.delete_all()
