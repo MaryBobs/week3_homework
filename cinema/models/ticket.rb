@@ -50,8 +50,24 @@ def self.ticket_sale(customer,film, num_of_tickets)
   ticket += 1
   end
   customer.update()
+  return "#{customer.name}, thank you for your purchase of #{num_of_tickets} tickets for #{film.title}"
 end
 
+def self.number_of_tickets(customer)
+  sql = "SELECT * FROM tickets
+  WHERE customer_id = $1"
+  values = [customer.id]
+  tickets =  SqlRunner.run(sql, values).count
+  return "#{customer.name} has bought #{tickets} ticket(s)"
+end
+
+def self.customers_booked(film)
+  sql = "SELECT * FROM tickets
+  WHERE film_id = $1"
+  values = [film.id]
+  tickets = SqlRunner.run(sql, values).count
+  return "#{tickets} customers are going to watch #{film.title}"
+end
 
 def self.all()
   sql = "SELECT * FROM tickets;"
