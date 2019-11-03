@@ -42,6 +42,15 @@ def update()
   SqlRunner.run(sql, values)
 end
 
+def customers_booked()
+  sql = "SELECT customers.* FROM customers
+  INNER JOIN tickets ON customers.id = tickets.customer_id
+  WHERE film_id = $1"
+  values = [@id]
+  return SqlRunner.run(sql, values).map{|customer| Customer.new(customer)}
+end
+
+
 def self.all()
   sql = "SELECT * FROM films"
   return SqlRunner.run(sql).map{|film| Film.new(film)}
